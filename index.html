@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VaultFin PRO">
+    <title>VaultFin PRO v6.1 • Bóveda Financiera Cifrada</title>
+    <!-- Self-contained Utility CSS (Zero external CDN execution risk inside encrypted vault) -->
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-950: #020617; --bg-900: #0f172a; --bg-800: #1e293b; --bg-700: #334155;
+            --text-100: #f1f5f9; --text-200: #e2e8f0; --text-300: #cbd5e1; --text-400: #94a3b8; --text-500: #64748b;
+            --brand-400: #4ade80; --brand-500: #22c55e; --brand-600: #16a34a;
+            --emerald-400: #34d399; --sky-400: #38bdf8; --sky-500: #0ea5e9;
+            --rose-300: #fda4af; --rose-400: #fb7185; --rose-500: #f43f5e;
+            --amber-300: #fcd34d; --amber-400: #fbbf24; --amber-500: #f59e0b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-900); color: var(--text-100);
+            min-height: 100vh; display: flex; flex-direction: column; line-height: 1.45;
+        }
+        button, input, select { font-family: inherit; color: inherit; }
+        button { cursor: pointer; border: none; background: transparent; }
+        code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85em; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.6); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.8); }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .flex-1 { flex: 1 1 0%; }
+        .shrink-0 { flex-shrink: 0; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gap-2 { gap: 0.5rem; } .gap-3 { gap: 0.75rem; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; }
+        .space-x-2 > * + * { margin-left: 0.5rem; } .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; } .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; } .space-y-5 > * + * { margin-top: 1.25rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+
+        .w-3 { width: 0.75rem; } .h-3 { height: 0.75rem; }
+        .w-4 { width: 1rem; } .h-4 { height: 1rem; }
+        .w-5 { width: 1.25rem; } .h-5 { height: 1.25rem; }
+        .w-6 { width: 1.5rem; } .h-6 { height: 1.5rem; }
+        .w-7 { width: 1.75rem; } .h-7 { height: 1.75rem; }
+        .w-14 { width: 3.5rem; } .h-14 { height: 3.5rem; }
+        .w-full { width: 100%; } .h-full { height: 100%; }
+        .max-w-sm { max-width: 24rem; } .max-w-md { max-width: 28rem; }
+        .max-w-7xl { max-width: 80rem; } .max-w-\[85\%\] { max-width: 85%; }
+        .h-\[430px\] { height: 430px; }
+        .max-h-64 { max-height: 16rem; } .max-h-\[160px\] { max-height: 160px; }
+        .max-h-\[260px\] { max-height: 260px; } .max-h-\[300px\] { max-height: 300px; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mt-0\.5 { margin-top: 0.125rem; } .mt-1 { margin-top: 0.25rem; }
+        .p-2 { padding: 0.5rem; } .p-2\.5 { padding: 0.625rem; } .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; } .p-5 { padding: 1.25rem; } .p-6 { padding: 1.5rem; }
+        .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+
+        .fixed { position: fixed; } .sticky { position: sticky; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; } .top-0 { top: 0; }
+        .z-50 { z-index: 50; } .z-\[100\] { z-index: 100; }
+        .overflow-hidden { overflow: hidden; } .overflow-y-auto { overflow-y: auto; }
+
+        .text-\[10px\] { font-size: 0.625rem; } .text-\[11px\] { font-size: 0.6875rem; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; } .text-lg { font-size: 1.125rem; } .text-xl { font-size: 1.25rem; }
+        .font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .italic { font-style: italic; } .uppercase { text-transform: uppercase; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .whitespace-pre-line { white-space: pre-line; }
+        .line-through { text-decoration: line-through; }
+        .hover\:underline:hover { text-decoration: underline; }
+
+        .bg-slate-950\/95 { background-color: rgba(2, 6, 23, 0.96); }
+        .bg-black\/75 { background-color: rgba(0, 0, 0, 0.78); }
+        .bg-slate-900 { background-color: var(--bg-900); }
+        .bg-slate-900\/60 { background-color: rgba(15, 23, 42, 0.6); }
+        .bg-slate-800 { background-color: var(--bg-800); }
+        .bg-slate-800\/50 { background-color: rgba(30, 41, 59, 0.5); }
+        .bg-slate-800\/70 { background-color: rgba(30, 41, 59, 0.7); }
+        .bg-slate-700 { background-color: var(--bg-700); }
+        .hover\:bg-slate-700:hover { background-color: var(--bg-700); }
+        .hover\:bg-slate-600:hover { background-color: #475569; }
+
+        .bg-brand-500 { background-color: var(--brand-500); }
+        .bg-brand-600 { background-color: var(--brand-600); }
+        .hover\:bg-brand-500:hover { background-color: var(--brand-500); }
+        .bg-brand-500\/20 { background-color: rgba(34, 197, 94, 0.2); }
+        .bg-brand-500\/10 { background-color: rgba(34, 197, 94, 0.1); }
+        .bg-brand-600\/20 { background-color: rgba(22, 163, 74, 0.2); }
+        .bg-brand-600\/30 { background-color: rgba(22, 163, 74, 0.3); }
+
+        .text-white { color: #ffffff; }
+        .text-slate-200 { color: var(--text-200); }
+        .text-slate-300 { color: var(--text-300); }
+        .text-slate-400 { color: var(--text-400); }
+        .text-slate-500 { color: var(--text-500); }
+        .text-brand-400 { color: var(--brand-400); }
+        .text-emerald-400 { color: var(--emerald-400); }
+        .text-sky-400 { color: var(--sky-400); }
+        .text-amber-300 { color: var(--amber-300); }
+        .text-amber-400 { color: var(--amber-400); }
+        .text-rose-300 { color: var(--rose-300); }
+        .text-rose-400 { color: var(--rose-400); }
+
+        .border { border-width: 1px; border-style: solid; }
+        .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+        .border-slate-700 { border-color: var(--bg-700); }
+        .border-slate-700\/50 { border-color: rgba(51, 65, 85, 0.5); }
+        .border-slate-700\/60 { border-color: rgba(51, 65, 85, 0.6); }
+        .border-slate-700\/70 { border-color: rgba(51, 65, 85, 0.7); }
+        .border-brand-500\/30 { border-color: rgba(34, 197, 94, 0.3); }
+        .border-brand-500\/40 { border-color: rgba(34, 197, 94, 0.4); }
+        .border-amber-500\/30 { border-color: rgba(245, 158, 11, 0.3); }
+        .border-rose-800\/50 { border-color: rgba(159, 18, 57, 0.5); }
+
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-full { border-radius: 9999px; }
+
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25); }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.35); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65); }
+        .backdrop-blur-md { backdrop-filter: blur(12px); }
+        .opacity-50 { opacity: 0.5; }
+        .cursor-pointer { cursor: pointer; }
+        .transition { transition: all 150ms ease; }
+        .transition-all { transition: all 300ms ease; }
+        .focus\:outline-none:focus { outline: none; }
+        .focus\:border-brand-500:focus { border-color: var(--brand-500); }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+        .animate-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    
+        /* --- utilidades faltantes y variantes responsive (antes los textos de los botones quedaban ocultos) --- */
+        .w-fit{width:fit-content}.ml-auto{margin-left:auto}.text-center{text-align:center}.text-left{text-align:left}
+        .pr-1{padding-right:.25rem}.pb-4{padding-bottom:1rem}.pt-1{padding-top:.25rem}.mb-3{margin-bottom:.75rem}
+        .p-1{padding:.25rem}.p-1\.5{padding:.375rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}
+        .py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
+        .w-2{width:.5rem}.h-2{height:.5rem}.space-x-1>*+*{margin-left:.25rem}.space-x-1\.5>*+*{margin-left:.375rem}
+        .border-t{border-top-width:1px;border-top-style:solid}.border-slate-600{border-color:#475569}.border-brand-500{border-color:var(--brand-500)}
+        .border-emerald-500\/30{border-color:rgba(16,185,129,.3)}.bg-emerald-500\/20{background-color:rgba(16,185,129,.2)}.bg-amber-500\/20{background-color:rgba(245,158,11,.2)}
+        .bg-slate-900\/50{background-color:rgba(15,23,42,.5)}.bg-slate-900\/40{background-color:rgba(15,23,42,.4)}.bg-slate-900\/90{background-color:rgba(15,23,42,.9)}
+        .bg-slate-700\/50{background-color:rgba(51,65,85,.5)}.bg-slate-700\/60{background-color:rgba(51,65,85,.6)}.bg-rose-950\/80{background-color:rgba(76,5,25,.8)}.bg-rose-500{background-color:var(--rose-500)}
+        .bg-slate-600{background-color:#475569}.border-slate-600\/50{border-color:rgba(71,85,105,.5)}
+        .rounded-t-2xl{border-top-left-radius:1rem;border-top-right-radius:1rem}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}
+        .text-slate-100{color:var(--text-100)}.hover\:text-slate-200:hover{color:var(--text-200)}.hover\:text-rose-300:hover{color:var(--rose-300)}
+        .placeholder-slate-500::placeholder{color:var(--text-500)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,.45)}
+        @media (min-width:640px){.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.hidden.sm\:inline{display:inline !important}}
+        @media (min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:p-6{padding:1.5rem}}
+        @media (min-width:1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:col-span-2{grid-column:span 2 / span 2}}
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Lock Screen Overlay -->
+    <div id="lockScreen" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 max-w-sm w-full p-6 rounded-2xl shadow-2xl space-y-5 text-center">
+            <div class="w-14 h-14 bg-brand-500/20 text-brand-400 border border-brand-500/40 rounded-2xl mx-auto flex items-center justify-center">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-white">Bóveda Cifrada VaultFin v6.1</h2>
+                <p class="text-xs text-slate-400 mt-1">Ingresa tu clave maestra para descifrar tus registros</p>
+            </div>
+            <form onsubmit="handleUnlockSubmit(event)" class="space-y-3">
+                <input type="password" id="unlockPinInput" autocomplete="off" placeholder="Clave maestra de acceso" 
+                    class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-center text-lg tracking-widest text-white focus:outline-none focus:border-brand-500">
+                <p id="unlockErrorText" class="text-xs text-rose-400 hidden"></p>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
+                    Desbloquear Bóveda
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 px-4 py-3 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-500 text-slate-900 p-2 rounded-xl font-bold flex items-center justify-center shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-lg font-bold tracking-tight">VaultFin <span class="text-brand-400 font-semibold">PRO v6.1</span></h1>
+                        <span id="offlineBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Verificando...</span>
+                        <span id="cryptoBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 border border-slate-600 font-medium">Sin Clave</span>
+                    </div>
+                    <p class="text-xs text-slate-400">Migración V5 • Exportación Cifrada AES-256 • Respaldos Restaurables</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-2">
+                <button id="installAppBtn" onclick="installPWA()" class="hidden bg-brand-600 hover:bg-brand-500 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center space-x-1 shadow-sm">
+                    <span>Instalar App</span>
+                </button>
+                <button onclick="lockVaultManually()" id="lockVaultBtn" class="hidden bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition text-amber-300 border border-amber-500/30" title="Bloquear bóveda manualmente">
+                    🔒 Bloquear
+                </button>
+                <button onclick="openSecurityModal()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center space-x-1 text-emerald-400 border border-emerald-500/30" title="Configurar PIN y Cifrado AES-256">
+                    <span>🔐 Seguridad</span>
+                </button>
+                <button onclick="openRecoveryModal()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center space-x-1 text-amber-400 border border-amber-500/30" title="Puntos de restauración">
+                    <span>🕘 Respaldos</span>
+                </button>
+                <button onclick="showVoiceAndPWAGuide()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center space-x-1 text-brand-400 border border-brand-500/30">
+                    <span>📲 Portabilidad</span>
+                </button>
+                <button onclick="exportData()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center space-x-1">
+                    <span>Exportar</span>
+                </button>
+                <label class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer flex items-center space-x-1">
+                    <span>Importar</span>
+                    <input type="file" id="importFile" onchange="importData(event)" class="hidden" accept=".json,.vaultfin">
+                </label>
+                <button onclick="clearAllData()" class="text-rose-400 hover:text-rose-300 p-2 text-xs font-medium">Reiniciar</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <section class="lg:col-span-2 flex flex-col space-y-5">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[11px] font-medium text-slate-400">Disponible Principal</p>
+                        <button onclick="promptInitialBalance()" title="Registrar apertura de saldo" class="text-[10px] text-brand-400 hover:underline">Saldo Inicial</button>
+                    </div>
+                    <h3 id="mainBalance" class="text-xl font-bold mt-1 text-brand-400">$0.00</h3>
+                    <p id="initialBalanceSub" class="text-[10px] text-slate-500 mt-0.5">Apertura: $0.00</p>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl shadow-sm">
+                    <p class="text-[11px] font-medium text-slate-400">En Proyectos</p>
+                    <h3 id="projectsTotalBalance" class="text-xl font-bold mt-1 text-sky-400">$0.00</h3>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Conciliado</p>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl shadow-sm">
+                    <p class="text-[11px] font-medium text-slate-400">Ingresos Reales</p>
+                    <h3 id="totalIncome" class="text-xl font-bold mt-1 text-emerald-400">$0.00</h3>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Excluye apertura</p>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl shadow-sm">
+                    <p class="text-[11px] font-medium text-slate-400">Egresos Reales</p>
+                    <h3 id="totalExpense" class="text-xl font-bold mt-1 text-rose-400">$0.00</h3>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Gastos limpios</p>
+                </div>
+            </div>
+
+            <!-- View Switcher Tabs -->
+            <div class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 w-fit">
+                <button id="tabBtnAssistant" onclick="switchMainTab('assistant')" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition">
+                    🎙️ Asistente Aura
+                </button>
+                <button id="tabBtnReports" onclick="switchMainTab('reports')" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                    📊 Reportes y Presupuestos
+                </button>
+            </div>
+
+            <!-- TAB 1: Assistant Interactive Chat Box -->
+            <div id="viewAssistant" class="flex flex-col space-y-5">
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl flex flex-col h-[430px] shadow-lg">
+                    <div class="p-4 border-b border-slate-700 flex flex-wrap justify-between items-center gap-2 bg-slate-800/50 rounded-t-2xl">
+                        <div class="flex items-center space-x-2">
+                            <div id="auraIndicator" class="w-3 h-3 rounded-full bg-brand-500"></div>
+                            <h2 class="font-semibold text-sm">Asistente "Aura" (Voz y Texto)</h2>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button id="autoListenBtn" onclick="toggleAutoListenOnOpen()" class="text-xs bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-full text-slate-200 transition border border-slate-600">
+                                <span id="autoListenStatus">⚡ Auto-voz al abrir: OFF</span>
+                            </button>
+                            <button id="continuousVoiceBtn" onclick="toggleContinuousListening()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-full text-slate-200 transition flex items-center space-x-1.5 border border-slate-600">
+                                <span id="micStatusDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                <span id="micStatusText">Escucha continua: OFF</span>
+                            </button>
+                            <button id="muteVoiceBtn" onclick="toggleSpeechOutput()" class="text-xs bg-slate-700 hover:bg-slate-600 p-1.5 rounded-full text-slate-200 transition">
+                                🔊
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
+                    <div id="liveTranscript" class="hidden px-4 py-1.5 bg-slate-900/90 text-xs text-brand-400 italic border-t border-slate-700/50"></div>
+
+                    <form id="chatForm" onsubmit="handleChatSubmit(event)" class="p-3 border-t border-slate-700 flex gap-2">
+                        <button type="button" id="micBtn" onclick="startSingleDictation()" title="Dictar comando" 
+                            class="bg-slate-700 hover:bg-slate-600 text-brand-400 p-2.5 rounded-xl transition flex items-center justify-center border border-slate-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                        </button>
+                        <input type="text" id="chatInput" maxlength="220" placeholder="Di 'Aura, ingreso mil quinientos...' o escribe aquí" 
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-slate-100 placeholder-slate-500">
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-500 px-5 py-2.5 rounded-xl font-medium text-sm transition flex items-center justify-center">
+                            Enviar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Quick Action Helpers -->
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl">
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Acciones Rápidas</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button onclick="quickPrompt('ingreso ')" class="bg-slate-700/50 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-medium text-left transition border border-slate-600/50">
+                            ➕ Registrar Ingreso
+                        </button>
+                        <button onclick="quickPrompt('gasto ')" class="bg-slate-700/50 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-medium text-left transition border border-slate-600/50">
+                            ➖ Registrar Gasto
+                        </button>
+                        <button onclick="quickPrompt('crear proyecto ')" class="bg-slate-700/50 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-medium text-left transition border border-slate-600/50">
+                            📁 Nuevo Proyecto
+                        </button>
+                        <button onclick="quickPrompt('anular ultimo')" class="bg-slate-700/50 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-medium text-left transition border border-slate-600/50 text-amber-300">
+                            ↩️ Anular Último
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Reports, Budgets & Period Analytics -->
+            <div id="viewReports" class="hidden flex-col space-y-5">
+                <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl space-y-5 shadow-lg">
+                    <div class="flex flex-wrap justify-between items-center gap-3 border-b border-slate-700 pb-4">
+                        <div>
+                            <h2 class="font-bold text-base text-white">Análisis Financiero por Período</h2>
+                            <p class="text-xs text-slate-400">Estadísticas puras con reversiones auditadas</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select id="reportPeriodSelect" onchange="renderReports()" class="bg-slate-900 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="month">Este Mes</option>
+                                <option value="week">Últimos 7 Días</option>
+                                <option value="year">Este Año</option>
+                                <option value="all">Todo el Historial</option>
+                            </select>
+                            <button onclick="configureMonthlyBudget()" class="bg-brand-600 hover:bg-brand-500 text-white px-3 py-2 rounded-xl text-xs font-semibold transition">
+                                🎯 Fijar Límite
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl">
+                            <span class="text-xs text-slate-400">Ingresos Reales del Período</span>
+                            <p id="repIncome" class="text-lg font-bold text-emerald-400 mt-1">$0.00</p>
+                        </div>
+                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl">
+                            <span class="text-xs text-slate-400">Egresos Reales del Período</span>
+                            <p id="repExpense" class="text-lg font-bold text-rose-400 mt-1">$0.00</p>
+                        </div>
+                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl">
+                            <span class="text-xs text-slate-400">Flujo Neto Operativo</span>
+                            <p id="repNet" class="text-lg font-bold text-brand-400 mt-1">$0.00</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-semibold text-slate-200">Límite de Gasto Mensual</span>
+                            <span id="budgetLabel" class="text-slate-400">Sin límite definido</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700">
+                            <div id="budgetProgressBar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="budgetAlertText" class="text-[11px] text-slate-400"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl space-y-3">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Distribución de Capital Total</h3>
+                            <div id="capitalDistributionContainer" class="space-y-2 text-xs"></div>
+                        </div>
+                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl space-y-3">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ejecución de Proyectos</h3>
+                            <div id="projectStatsContainer" class="space-y-2.5 max-h-[160px] overflow-y-auto pr-1 text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Column 3: Projects & Transactions Sidebar -->
+        <section class="flex flex-col space-y-6">
+            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex flex-col">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="font-semibold text-sm">Pequeños Proyectos</h2>
+                    <span id="projectCount" class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full">0 activos</span>
+                </div>
+                <div id="projectsList" class="space-y-3 max-h-[260px] overflow-y-auto pr-1"></div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex-1 flex flex-col">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="font-semibold text-sm">Libro Mayor Auditable</h2>
+                    <span class="text-xs text-slate-400">Solo reversiones</span>
+                </div>
+                <div id="transactionsList" class="space-y-2.5 overflow-y-auto max-h-[300px] pr-1 flex-1"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Modal -->
+    <div id="customModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 max-w-md w-full p-6 rounded-2xl shadow-xl space-y-4">
+            <h3 id="modalTitle" class="text-lg font-bold text-white text-center">Aviso</h3>
+            <p id="modalMessage" class="text-sm text-slate-300 whitespace-pre-line text-center"></p>
+            <div id="modalInputContainer" class="hidden">
+                <input type="text" id="modalInput" placeholder="" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-2.5 text-center text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div id="modalCustomBody" class="hidden space-y-2 max-h-64 overflow-y-auto"></div>
+            <div id="modalActions" class="flex gap-2 pt-1">
+                <button id="modalCancelBtn" onclick="closeModal()" class="hidden flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 rounded-xl transition text-sm">Cancelar</button>
+                <button id="modalConfirmBtn" onclick="closeModal()" class="flex-1 bg-brand-600 hover:bg-brand-500 text-white font-medium py-2.5 rounded-xl transition text-sm">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+        window.addEventListener('error', (e) => { try { showModal("Error en la app", String(e.message || e.error)); } catch (x) {} });
+        window.addEventListener('unhandledrejection', (e) => { try { showModal("Error en la app", String((e.reason && e.reason.message) || e.reason)); } catch (x) {} });
+
+        // =========================================================================
+        // 1. CRYPTOGRAPHIC SECURITY ENGINE & INACTIVITY LOCKOUT (v6.1)
+        // =========================================================================
+        let activeCryptoKey = null;
+        let activeSaltB64 = null;
+        let isEncryptionEnabled = false;
+        let isVaultLocked = false;
+        let inactivityTimer = null;
+        const INACTIVITY_LIMIT_MS = 5 * 60 * 1000;
+
+        function resetInactivityTimer() {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            if (!isVaultLocked && isEncryptionEnabled) {
+                inactivityTimer = setTimeout(() => {
+                    lockVaultManually();
+                    const ue = document.getElementById('unlockErrorText'); ue.textContent = 'Bloqueada por inactividad.'; ue.classList.remove('hidden');
+                }, INACTIVITY_LIMIT_MS);
+            }
+        }
+
+        ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => {
+            window.addEventListener(evt, resetInactivityTimer, { passive: true });
+        });
+
+        function lockVaultManually() {
+            if (!isEncryptionEnabled || !activeCryptoKey) return;
+            activeCryptoKey = null;
+            isVaultLocked = true;
+            isContinuousListening = false;
+            if (recognition) { try { recognition.stop(); } catch (e) {} }
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            closeModal();
+            // Vaciar datos sensibles de memoria y de pantalla mientras está bloqueada
+            state = { version: 6.1, initialBalance: 0, balance: 0, totalIncome: 0, totalExpense: 0, monthlyBudget: 0, transactions: [], projects: [] };
+            document.getElementById('chatMessages').replaceChildren();
+            updateUI(); updateMicUI(); updateCryptoBadge();
+            const lockScreen = document.getElementById('lockScreen');
+            lockScreen.classList.remove('hidden');
+            lockScreen.classList.add('flex');
+            setTimeout(() => document.getElementById('unlockPinInput').focus(), 100);
+        }
+
+        function generateUUID() {
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+            return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 11);
+        }
+
+        function bufToBase64(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+            return btoa(binary);
+        }
+
+        function base64ToBuf(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return bytes.buffer;
+        }
+
+        async function deriveKeyFromPin(pin, saltBuffer, iterations = 310000) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(pin), { name: "PBKDF2" }, false, ["deriveKey"]);
+            return crypto.subtle.deriveKey({ name: "PBKDF2", salt: saltBuffer, iterations, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+        }
+
+        async function encryptObject(obj, cryptoKey) {
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const enc = new TextEncoder();
+            const cipherBuffer = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, cryptoKey, enc.encode(JSON.stringify(obj)));
+            return { encrypted: true, iv: bufToBase64(iv), ciphertext: bufToBase64(cipherBuffer) };
+        }
+
+        async function decryptObject(encryptedPayload, cryptoKey) {
+            const iv = new Uint8Array(base64ToBuf(encryptedPayload.iv));
+            const plainBuffer = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, cryptoKey, base64ToBuf(encryptedPayload.ciphertext));
+            return JSON.parse(new TextDecoder().decode(plainBuffer));
+        }
+
+        function updateCryptoBadge() {
+            const badge = document.getElementById('cryptoBadge');
+            const lockBtn = document.getElementById('lockVaultBtn');
+            if (!badge) return;
+            if (isEncryptionEnabled) {
+                badge.textContent = '🔒 AES-256 Activo';
+                badge.className = 'text-[10px] px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-medium';
+                if (!isVaultLocked) lockBtn.classList.remove('hidden');
+                else lockBtn.classList.add('hidden');
+            } else {
+                badge.textContent = 'Sin Clave';
+                badge.className = 'text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 border border-slate-600 font-medium';
+                lockBtn.classList.add('hidden');
+            }
+        }
+
+        function sanitizeText(str, maxLen = 120) {
+            if (typeof str !== 'string') return '';
+            return str.replace(/[\u0000-\u001F\u007F<>]/g, '').trim().slice(0, maxLen);
+        }
+
+        // =========================================================================
+        // 2. TRANSACTIONAL INDEXEDDB & REVERSIONS WITH AUDITED REPORTS
+        // =========================================================================
+        const DB_NAME = 'VaultFinProDB_v6_1';
+        const DB_VERSION = 1;
+        let db = null;
+        let activeIterations = 310000;
+        const NEW_ITER = 600000;
+        const safeIter = (n) => { n = Number(n); return (n >= 10000 && n <= 1000000) ? n : 310000; };
+        let dbBlocked = false;
+
+        let state = {
+            version: 6.1,
+            initialBalance: 0,
+            balance: 0,
+            totalIncome: 0,
+            totalExpense: 0,
+            monthlyBudget: 0,
+            transactions: [],
+            projects: []
+        };
+
+        function cloneState(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        }
+
+        function initDatabase() {
+            return new Promise((resolve, reject) => {
+                if (!window.indexedDB) {
+                    reject(new Error('IndexedDB no soportado'));
+                    return;
+                }
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains('ledger')) database.createObjectStore('ledger', { keyPath: 'id' });
+                    if (!database.objectStoreNames.contains('snapshots')) database.createObjectStore('snapshots', { keyPath: 'id' });
+                    if (!database.objectStoreNames.contains('security')) database.createObjectStore('security', { keyPath: 'id' });
+                };
+                req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+                req.onerror = (e) => reject(e.target.error || new Error('Error al abrir IndexedDB'));
+            });
+        }
+
+        function reconcileFullLedger(targetState) {
+            let initialBal = 0;
+            let realIncome = 0;
+            let realExpense = 0;
+            let principalBal = 0;
+
+            const projStats = {};
+            (targetState.projects || []).forEach(p => { projStats[p.id] = { allocated: 0, spent: 0 }; });
+
+            const indexed = (targetState.transactions || []).map((tx, idx) => ({ tx, idx }));
+            indexed.sort((a, b) => {
+                const ta = Number(a.tx.timestamp) || 0;
+                const tb = Number(b.tx.timestamp) || 0;
+                return ta !== tb ? ta - tb : b.idx - a.idx;
+            });
+
+            const txById = {};
+            indexed.forEach(({ tx }) => { txById[tx.id] = tx; });
+
+            for (const { tx } of indexed) {
+                const amt = roundMoney(Number(tx.amount) || 0);
+
+                if (tx.type === 'initial_balance') {
+                    initialBal = roundMoney(initialBal + amt);
+                    principalBal = roundMoney(principalBal + amt);
+                } else if (tx.type === 'income') {
+                    realIncome = roundMoney(realIncome + amt);
+                    principalBal = roundMoney(principalBal + amt);
+                } else if (tx.type === 'expense') {
+                    realExpense = roundMoney(realExpense + amt);
+                    principalBal = roundMoney(principalBal - amt);
+                } else if (tx.type === 'project_allocation') {
+                    principalBal = roundMoney(principalBal - amt);
+                    if (tx.projectId && projStats[tx.projectId]) {
+                        projStats[tx.projectId].allocated = roundMoney(projStats[tx.projectId].allocated + amt);
+                    }
+                } else if (tx.type === 'project_expense') {
+                    realExpense = roundMoney(realExpense + amt);
+                    if (tx.projectId && projStats[tx.projectId]) {
+                        projStats[tx.projectId].spent = roundMoney(projStats[tx.projectId].spent + amt);
+                    }
+                } else if (tx.type === 'reversal') {
+                    const orig = tx.reversesId ? txById[tx.reversesId] : null;
+                    const revType = tx.reversesType || (orig ? orig.type : null);
+                    if (revType === 'initial_balance') {
+                        initialBal = roundMoney(initialBal - amt);
+                        principalBal = roundMoney(principalBal - amt);
+                    } else if (revType === 'income') {
+                        realIncome = roundMoney(realIncome - amt);
+                        principalBal = roundMoney(principalBal - amt);
+                    } else if (revType === 'expense') {
+                        realExpense = roundMoney(realExpense - amt);
+                        principalBal = roundMoney(principalBal + amt);
+                    } else if (revType === 'project_allocation') {
+                        principalBal = roundMoney(principalBal + amt);
+                        if (tx.projectId && projStats[tx.projectId]) {
+                            projStats[tx.projectId].allocated = roundMoney(projStats[tx.projectId].allocated - amt);
+                        }
+                    } else if (revType === 'project_expense') {
+                        realExpense = roundMoney(realExpense - amt);
+                        if (tx.projectId && projStats[tx.projectId]) {
+                            projStats[tx.projectId].spent = roundMoney(projStats[tx.projectId].spent - amt);
+                        }
+                    }
+                }
+
+                if (principalBal < -0.005) return false;
+                if (tx.projectId && projStats[tx.projectId]) {
+                    const stepProjBal = roundMoney(projStats[tx.projectId].allocated - projStats[tx.projectId].spent);
+                    if (stepProjBal < -0.005) return false;
+                }
+            }
+
+            targetState.projects = (targetState.projects || []).map(p => {
+                const st = projStats[p.id] || { allocated: 0, spent: 0 };
+                return {
+                    id: p.id,
+                    name: sanitizeText(p.name, 60),
+                    budget: st.allocated,
+                    balance: roundMoney(st.allocated - st.spent)
+                };
+            });
+
+            targetState.initialBalance = initialBal;
+            targetState.totalIncome = realIncome;
+            targetState.totalExpense = realExpense;
+            targetState.balance = principalBal;
+            return true;
+        }
+
+        async function commitStateTransaction(newState, priorSnapshot, reason = 'Actualización contable') {
+            if (isVaultLocked || dbBlocked) return false;
+            if (isEncryptionEnabled && !activeCryptoKey) return false;
+
+            const reconciled = cloneState(newState);
+            if (!reconcileFullLedger(reconciled)) return false;
+            if (!db) { state = reconciled; return true; }
+
+            try {
+                let ledgerPayload = reconciled;
+                let snapPayload = priorSnapshot ? cloneState(priorSnapshot) : null;
+                const encryptedFlag = Boolean(isEncryptionEnabled && activeCryptoKey);
+
+                if (encryptedFlag) {
+                    ledgerPayload = await encryptObject(reconciled, activeCryptoKey);
+                    if (snapPayload) snapPayload = await encryptObject(snapPayload, activeCryptoKey);
+                }
+
+                return await new Promise((resolve) => {
+                    const tx = db.transaction(['ledger', 'snapshots'], 'readwrite');
+                    tx.objectStore('ledger').put({ id: 'active_ledger', encrypted: encryptedFlag, payload: ledgerPayload, updatedAt: Date.now() });
+                    if (snapPayload) {
+                        const snapStore = tx.objectStore('snapshots');
+                        snapStore.put({ id: generateUUID(), timestamp: Date.now(), reason: sanitizeText(reason, 80), encrypted: encryptedFlag, payload: snapPayload });
+                        
+                        // Limit retention to 20 snapshots
+                        snapStore.getAll().onsuccess = (e) => {
+                            const list = e.target.result || [];
+                            if (list.length > 20) {
+                                list.sort((a, b) => a.timestamp - b.timestamp);
+                                for (let i = 0; i < list.length - 20; i++) snapStore.delete(list[i].id);
+                            }
+                        };
+                    }
+                    tx.oncomplete = () => { state = reconciled; resolve(true); };
+                    tx.onerror = () => resolve(false);
+                    tx.onabort = () => resolve(false);
+                });
+            } catch (err) {
+                return false;
+            }
+        }
+
+        async function getSnapshotsList() {
+            if (!db) return [];
+            return new Promise((resolve) => {
+                const tx = db.transaction(['snapshots'], 'readonly');
+                const req = tx.objectStore('snapshots').getAll();
+                req.onsuccess = () => resolve((req.result || []).sort((a, b) => b.timestamp - a.timestamp));
+                req.onerror = () => resolve([]);
+            });
+        }
+
+        async function rotateSecurityConfigurationAtomic(enable, newKey, newSaltB64, newIterations) {
+            if (!db || isVaultLocked) return { ok: false, reason: 'La bóveda está bloqueada.' };
+            try {
+                const rawSnapshots = await getSnapshotsList();
+                const decryptedSnapshots = [];
+                for (const snap of rawSnapshots) {
+                    let plain = null;
+                    if (snap.encrypted) {
+                        if (!activeCryptoKey) return { ok: false, reason: 'Respaldo cifrado sin clave.' };
+                        plain = await decryptObject(snap.payload, activeCryptoKey);
+                    } else {
+                        plain = snap.payload;
+                    }
+                    decryptedSnapshots.push({ id: snap.id, timestamp: snap.timestamp, reason: snap.reason, plainData: plain });
+                }
+
+                const currentPlainLedger = cloneState(state);
+                let targetLedgerPayload = currentPlainLedger;
+                const reEncryptedSnaps = [];
+
+                if (enable && newKey) {
+                    targetLedgerPayload = await encryptObject(currentPlainLedger, newKey);
+                    for (const item of decryptedSnapshots) {
+                        reEncryptedSnaps.push({ id: item.id, timestamp: item.timestamp, reason: item.reason, encrypted: true, payload: await encryptObject(item.plainData, newKey) });
+                    }
+                } else {
+                    for (const item of decryptedSnapshots) {
+                        reEncryptedSnaps.push({ id: item.id, timestamp: item.timestamp, reason: item.reason, encrypted: false, payload: item.plainData });
+                    }
+                }
+
+                const committed = await new Promise((resolve) => {
+                    const tx = db.transaction(['ledger', 'snapshots', 'security'], 'readwrite');
+                    tx.objectStore('security').put({ id: 'security_config', enabled: Boolean(enable), salt: enable ? newSaltB64 : null, iterations: enable ? newIterations : null, updatedAt: Date.now() });
+                    tx.objectStore('ledger').put({ id: 'active_ledger', encrypted: Boolean(enable), payload: targetLedgerPayload, updatedAt: Date.now() });
+                    const snapStore = tx.objectStore('snapshots');
+                    tx.onabort = () => resolve(false); snapStore.clear();
+                    reEncryptedSnaps.forEach(s => snapStore.put(s));
+
+                    tx.oncomplete = () => {
+                        isEncryptionEnabled = Boolean(enable);
+                        activeCryptoKey = enable ? newKey : null;
+                        activeSaltB64 = enable ? newSaltB64 : null;
+                        activeIterations = enable ? newIterations : 310000;
+                        updateCryptoBadge();
+                        resolve(true);
+                    };
+                    tx.onerror = () => resolve(false);
+                });
+                return committed ? { ok: true } : { ok: false, reason: 'Error en IndexedDB' };
+            } catch (err) {
+                return { ok: false, reason: 'Error criptográfico' };
+            }
+        }
+
+        // =========================================================================
+        // 3. MIGRATION REAL V5, V4, V3, V2 & SECURE ENCRYPTED IMPORT
+        // =========================================================================
+        async function readLegacyDatabaseRecord(dbName) {
+            if (!window.indexedDB) return null;
+            return new Promise((resolve) => {
+                let req;
+                try { req = indexedDB.open(dbName); } catch (e) { resolve(null); return; }
+                // Si la base no existe, abortar la creación para no dejar bases vacías
+                req.onupgradeneeded = (e) => { try { e.target.transaction.abort(); } catch (x) {} };
+                req.onerror = (e) => { e.preventDefault(); resolve(null); };
+                req.onsuccess = (e) => {
+                    const legacyDb = e.target.result;
+                    try {
+                        const storeNames = Array.from(legacyDb.objectStoreNames);
+                        const storeName = storeNames.includes('ledger') ? 'ledger' : storeNames[0];
+                        if (!storeName) { legacyDb.close(); resolve(null); return; }
+                        const getReq = legacyDb.transaction([storeName], 'readonly').objectStore(storeName).get('active_ledger');
+                        getReq.onsuccess = () => { legacyDb.close(); resolve(getReq.result || null); };
+                        getReq.onerror = () => { legacyDb.close(); resolve(null); };
+                    } catch (err) { legacyDb.close(); resolve(null); }
+                };
+            });
+        }
+
+        async function loadInitialDatabaseState() {
+            const secConfig = await new Promise((resolve) => {
+                const tx = db.transaction(['security'], 'readonly');
+                const req = tx.objectStore('security').get('security_config');
+                req.onsuccess = () => resolve(req.result || null);
+                req.onerror = () => resolve(null);
+            });
+
+            if (secConfig && secConfig.enabled && secConfig.salt) {
+                const iter = Number(secConfig.iterations) || 310000;
+                if (iter >= 10000 && iter <= 1000000) activeIterations = iter;
+                isEncryptionEnabled = true;
+                activeSaltB64 = secConfig.salt;
+                isVaultLocked = true;
+                updateCryptoBadge();
+
+                const lockScreen = document.getElementById('lockScreen');
+                lockScreen.classList.remove('hidden');
+                lockScreen.classList.add('flex');
+                setTimeout(() => document.getElementById('unlockPinInput').focus(), 100);
+                return false;
+            }
+
+            // Primero la base actual: antes una base antigua sobrescribía los datos nuevos en cada recarga
+            const currentLedger = await new Promise((resolve) => {
+                const req = db.transaction(['ledger'], 'readonly').objectStore('ledger').get('active_ledger');
+                req.onsuccess = () => resolve(req.result || null);
+                req.onerror = () => resolve(null);
+            });
+            if (currentLedger && currentLedger.payload) {
+                const validated = currentLedger.encrypted ? null : migrateAndValidateState(currentLedger.payload);
+                if (validated) { state = validated; return true; }
+                dbBlocked = true; // no sobrescribir datos que no se pueden leer
+                showModal("Datos no legibles", "Hay datos guardados que no se pueden leer (cifrados sin configuración de seguridad, o dañados). No se modificará nada para evitar pérdida de información.");
+                return false;
+            }
+
+            // Migración desde versiones anteriores (V5, V4, V3, V2)
+            for (const dbName of ['VaultFinProDB_v5', 'VaultFinProDB_v4', 'VaultFinProDB_v3', 'VaultFinSecureDB']) {
+                const rec = await readLegacyDatabaseRecord(dbName);
+                if (rec) {
+                    if (rec.encrypted && rec.payload) {
+                        promptForLegacyEncryptedMigration(rec, dbName);
+                        return false;
+                    } else if (rec.payload) {
+                        const validated = migrateAndValidateState(rec.payload);
+                        if (validated) {
+                            await commitStateTransaction(validated, null, `Migración desde ${dbName}`);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function promptForLegacyEncryptedMigration(rec, sourceName) {
+            showModal(
+                `Migración Bóveda Cifrada (${sourceName})`,
+                "Se detectó una bóveda cifrada en una versión anterior. Ingresa tu clave maestra para descifrarla y migrarla a v6.1:",
+                {
+                    showInput: true,
+                    inputType: 'password',
+                    confirmText: 'Descifrar y Migrar',
+                    onConfirm: async (pin) => {
+                        try {
+                            const saltBuf = rec.salt ? new Uint8Array(base64ToBuf(rec.salt)) : new TextEncoder().encode('vaultfin_salt_v4');
+                            const key = await deriveKeyFromPin(pin, saltBuf, safeIter(rec.iterations));
+                            const plain = await decryptObject(rec.payload, key);
+                            const validated = migrateAndValidateState(plain);
+                            if (validated) {
+                                isVaultLocked = false;
+                                await commitStateTransaction(validated, null, `Migración verificada desde ${sourceName}`);
+                                // Mantener el cifrado con la misma clave (antes quedaba en texto plano)
+                                const nSalt = crypto.getRandomValues(new Uint8Array(16));
+                                const nKey = await deriveKeyFromPin(pin, nSalt, NEW_ITER);
+                                await rotateSecurityConfigurationAtomic(true, nKey, bufToBase64(nSalt), NEW_ITER);
+                                isVaultLocked = false;
+                                updateCryptoBadge();
+                                document.getElementById('lockScreen').classList.add('hidden');
+                                renderWelcomeMessage();
+                                updateUI();
+                                showModal("Migración Exitosa", "Tus registros anteriores fueron descifrados y migrados correctamente a VaultFin v6.1.");
+                            } else {
+                                showModal("Error", "Los datos descifrados no cumplen con la estructura contable.");
+                            }
+                        } catch (e) {
+                            showModal("Clave Incorrecta", "No se pudo descifrar la base de datos anterior. Vuelve a intentarlo.");
+                        }
+                    }
+                }
+            );
+        }
+
+        async function handleUnlockSubmit(event) {
+            event.preventDefault();
+            const errEl = document.getElementById('unlockErrorText');
+            const pin = document.getElementById('unlockPinInput').value;
+            if (!pin) return;
+
+            try {
+                const key = await deriveKeyFromPin(pin, new Uint8Array(base64ToBuf(activeSaltB64)), activeIterations);
+                const ledgerRecord = await new Promise((resolve) => {
+                    const tx = db.transaction(['ledger'], 'readonly');
+                    const req = tx.objectStore('ledger').get('active_ledger');
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => resolve(null);
+                });
+
+                if (!ledgerRecord || ledgerRecord.encrypted !== true || !ledgerRecord.payload) {
+                    throw new Error('Registro cifrado no válido');
+                }
+
+                const plainState = await decryptObject(ledgerRecord.payload, key);
+                const validated = migrateAndValidateState(plainState);
+                if (!validated) throw new Error('Estado inválido');
+
+                state = validated;
+                activeCryptoKey = key;
+                isVaultLocked = false;
+                errEl.classList.add('hidden');
+                document.getElementById('unlockPinInput').value = '';
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('lockScreen').classList.remove('flex');
+                updateCryptoBadge();
+                resetInactivityTimer();
+
+                renderWelcomeMessage();
+                updateUI();
+            } catch (e) {
+                isVaultLocked = true;
+                activeCryptoKey = null;
+                errEl.textContent = 'Acceso denegado. Clave incorrecta.';
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        // =========================================================================
+        // 4. PARSER NUMÉRICO EXTENDIDO & VALIDACIÓN ESTRICTA DE IMPORTACIÓN
+        // =========================================================================
+        function parseSpanishAmount(text) {
+            if (!text) return NaN;
+            const lower = text.toLowerCase().trim();
+            const isNegative = /(?:^|\s)-\s*\d/.test(text) || /\bmenos\s+(?:\d|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|cien|mil|quinientos|millón|millones)/.test(lower);
+
+            let cleaned = lower
+                .replace(/c\$|us\$|\$|dólares|dolares|córdobas|cordobas|pesos|euros/gi, ' ')
+                .replace(/menos/g, ' ')
+                .trim();
+
+            const numTokenMatch = cleaned.match(/(?:^|\s)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?)(?=$|\s|[,.;:!?])/);
+            if (numTokenMatch) {
+                let rawNum = numTokenMatch[1];
+                if (rawNum.includes(',') && rawNum.includes('.')) {
+                    if (rawNum.lastIndexOf(',') > rawNum.lastIndexOf('.')) rawNum = rawNum.replace(/\./g, '').replace(',', '.');
+                    else rawNum = rawNum.replace(/,/g, '');
+                } else if (rawNum.includes(',')) {
+                    const parts = rawNum.split(',');
+                    if (parts[1] && parts[1].length === 3) rawNum = rawNum.replace(',', '');
+                    else rawNum = rawNum.replace(',', '.');
+                } else if (rawNum.includes('.')) {
+                    const parts = rawNum.split('.');
+                    if (parts[1] && parts[1].length === 3) rawNum = rawNum.replace(/\./g, '');
+                }
+                const parsed = parseFloat(rawNum);
+                if (Number.isFinite(parsed) && parsed > 0) return isNegative ? -roundMoney(parsed) : roundMoney(parsed);
+            }
+
+            const units = { 'un': 1, 'uno': 1, 'una': 1, 'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5, 'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9, 'diez': 10, 'once': 11, 'doce': 12, 'trece': 13, 'catorce': 14, 'quince': 15, 'veinte': 20, 'dieciseis': 16, 'dieciséis': 16, 'diecisiete': 17, 'dieciocho': 18, 'diecinueve': 19, 'veintiuno': 21, 'veintiun': 21, 'veintidos': 22, 'veintidós': 22, 'veintitres': 23, 'veintitrés': 23, 'veinticuatro': 24, 'veinticinco': 25, 'veintiseis': 26, 'veintiséis': 26, 'veintisiete': 27, 'veintiocho': 28, 'veintinueve': 29, 'treinta': 30, 'cuarenta': 40, 'cincuenta': 50, 'sesenta': 60, 'setenta': 70, 'ochenta': 80, 'noventa': 90 };
+            const hundreds = { 'cien': 100, 'ciento': 100, 'doscientos': 200, 'trescientos': 300, 'cuatrocientos': 400, 'quinientos': 500, 'seiscientos': 600, 'setecientos': 700, 'ochocientos': 800, 'novecientos': 900 };
+
+            const tokens = cleaned.replace(/[^a-záéíóúüñ0-9\s]/gi, ' ').split(/\s+/);
+            let total = 0; let current = 0; let foundWord = false;
+
+            for (const w of tokens) {
+                if (w === 'y') continue;
+                if (units[w] !== undefined) { current += units[w]; foundWord = true; }
+                else if (hundreds[w] !== undefined) { current += hundreds[w]; foundWord = true; }
+                else if (w === 'mil') { total += (current === 0 ? 1 : current) * 1000; current = 0; foundWord = true; }
+                else if (w === 'millón' || w === 'millon' || w === 'millones') { total += (current === 0 ? 1 : current) * 1000000; current = 0; foundWord = true; }
+                else if (foundWord) break;
+            }
+            const res = total + current;
+            if (foundWord && res > 0) {
+                const finalAmt = roundMoney(res);
+                return isNegative ? -finalAmt : finalAmt;
+            }
+            return NaN;
+        }
+
+        function migrateAndValidateState(raw) {
+            if (!raw || typeof raw !== 'object') return null;
+            if (!Array.isArray(raw.transactions) || !Array.isArray(raw.projects)) return null;
+
+            const normalizedProjects = [];
+            const projNameToId = {};
+            const validProjectIds = new Set();
+            for (const p of raw.projects) {
+                if (!p || typeof p.name !== 'string' || !p.name.trim()) return null;
+                const pid = p.id ? String(p.id) : generateUUID();
+                if (validProjectIds.has(pid)) return null;
+                const cleanName = sanitizeText(p.name, 60);
+                normalizedProjects.push({ id: pid, name: cleanName, balance: 0, budget: 0 });
+                projNameToId[cleanName.toLowerCase()] = pid;
+                validProjectIds.add(pid);
+            }
+
+            const allowedTypes = new Set(['initial_balance', 'income', 'expense', 'project_allocation', 'project_expense', 'reversal']);
+            const txIds = new Set();
+            const normalizedTx = [];
+
+            for (const t of raw.transactions) {
+                if (!t || typeof t !== 'object') return null;
+                const amt = roundMoney(Number(t.amount));
+                if (!Number.isFinite(amt) || amt <= 0) return null;
+                if (!allowedTypes.has(t.type)) return null;
+
+                const tid = t.id ? String(t.id) : generateUUID();
+                if (txIds.has(tid)) return null;
+                txIds.add(tid);
+
+                let txType = t.type;
+                let txDesc = sanitizeText(t.desc || 'Movimiento', 120);
+                let projId = t.projectId ? String(t.projectId) : null;
+
+                if (projId && !validProjectIds.has(projId)) return null;
+
+                if (txType === 'project_creation') {
+                    txType = 'project_allocation';
+                }
+
+                if (txType === 'expense' && !projId && Number(raw.version) < 6) {
+                    for (const [pname, pid] of Object.entries(projNameToId)) {
+                        if (txDesc.toLowerCase().includes(pname)) {
+                            txType = 'project_expense';
+                            projId = pid;
+                            break;
+                        }
+                    }
+                }
+
+                if (txType === 'reversal') {
+                    if (!t.reversesId) return null;
+                }
+
+                normalizedTx.push({
+                    id: tid,
+                    type: txType,
+                    amount: amt,
+                    desc: txDesc,
+                    projectId: projId,
+                    reversesId: t.reversesId ? String(t.reversesId) : null,
+                    reversesType: t.reversesType || null,
+                    voided: Boolean(t.voided),
+                    timestamp: Number(t.timestamp) || Date.now(),
+                    date: typeof t.date === 'string' ? t.date : new Date().toLocaleDateString()
+                });
+            }
+
+            const byId = new Map(normalizedTx.map(t => [t.id, t]));
+            normalizedTx.forEach(t => { t.voided = false; });
+            const reversed = new Set();
+            for (const t of normalizedTx) {
+                if (t.type !== 'reversal') continue;
+                const orig = byId.get(t.reversesId);
+                if (!orig || orig.type === 'reversal' || orig.amount !== t.amount || reversed.has(orig.id)) return null;
+                reversed.add(orig.id);
+                orig.voided = true;
+                t.reversesType = orig.type;
+                t.projectId = orig.projectId;
+            }
+
+            const candidate = {
+                version: 6.1,
+                initialBalance: 0,
+                balance: 0,
+                totalIncome: 0,
+                totalExpense: 0,
+                monthlyBudget: Math.max(0, roundMoney(Number(raw.monthlyBudget) || 0)),
+                transactions: normalizedTx,
+                projects: normalizedProjects
+            };
+
+            const cloneForValidation = cloneState(candidate);
+            if (!reconcileFullLedger(cloneForValidation)) return null;
+            return candidate;
+        }
+
+        function roundMoney(num) {
+            return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+        }
+
+        // =========================================================================
+        // 5. ACTIONS, RESTORABLE BACKUPS & ENCRYPTED EXPORT/IMPORT
+        // =========================================================================
+        async function voidTransactionByIdInner(txId) {
+            const targetTx = state.transactions.find(t => t.id === txId);
+            if (!targetTx || targetTx.voided || targetTx.type === 'reversal') return false;
+
+            const alreadyReversed = state.transactions.some(t => t.reversesId === txId && !t.voided);
+            if (alreadyReversed) {
+                showModal("Aviso", "Este movimiento ya cuenta con un contra-asiento de reversión activo.");
+                return false;
+            }
+
+            const priorSnapshot = cloneState(state);
+            const candidateState = cloneState(state);
+            const candidateTx = candidateState.transactions.find(t => t.id === txId);
+            candidateTx.voided = true;
+
+            candidateState.transactions.unshift({
+                id: generateUUID(),
+                type: 'reversal',
+                amount: targetTx.amount,
+                desc: `Reversión de: ${targetTx.desc}`,
+                projectId: targetTx.projectId || null,
+                reversesId: targetTx.id,
+                reversesType: targetTx.type,
+                voided: false,
+                timestamp: Date.now(),
+                date: new Date().toLocaleDateString()
+            });
+
+            if (!reconcileFullLedger(candidateState)) {
+                showModal("Reversión Bloqueada", "El saldo principal o de proyecto quedaría negativo al anular este movimiento.");
+                return false;
+            }
+
+            const saved = await commitStateTransaction(candidateState, priorSnapshot, `Reversión: ${targetTx.desc}`);
+            if (saved) {
+                updateUI();
+                appendSafeMessage([{ text: `↩️ Contra-asiento registrado para: ${targetTx.desc}` }], 'assistant');
+                return true;
+            }
+            return false;
+        }
+
+        function promptInitialBalance() {
+            showModal(
+                "Apertura de Saldo Inicial",
+                "Ingresa el monto con el que inicia tu bóveda principal:",
+                {
+                    showInput: true,
+                    inputType: 'text',
+                    confirmText: 'Registrar Apertura',
+                    onConfirm: async (val) => {
+                        const amt = parseSpanishAmount(val);
+                        if (!Number.isFinite(amt) || amt <= 0) { showModal("Error", "Monto inválido."); return; }
+                        const prior = cloneState(state);
+                        const next = cloneState(state);
+                        next.transactions.unshift({
+                            id: generateUUID(),
+                            type: 'initial_balance',
+                            amount: amt,
+                            desc: 'Apertura de saldo inicial',
+                            projectId: null,
+                            voided: false,
+                            timestamp: Date.now(),
+                            date: new Date().toLocaleDateString()
+                        });
+                        if (await commitStateTransaction(next, prior, 'Saldo inicial')) {
+                            updateUI();
+                            showModal("Registrado", `Saldo inicial fijado en ${formatCurrency(amt)}`);
+                        }
+                    }
+                }
+            );
+        }
+
+        function configureMonthlyBudget() {
+            showModal(
+                "Límite de Gasto Mensual",
+                "Define tu presupuesto máximo de egresos para el mes:",
+                {
+                    showInput: true,
+                    inputType: 'text',
+                    confirmText: 'Guardar Límite',
+                    onConfirm: async (val) => {
+                        const amt = parseSpanishAmount(val);
+                        if (!Number.isFinite(amt) || amt < 0) { showModal("Error", "Monto inválido."); return; }
+                        const prior = cloneState(state);
+                        const next = cloneState(state);
+                        next.monthlyBudget = amt;
+                        if (await commitStateTransaction(next, prior, 'Presupuesto mensual')) {
+                            updateUI();
+                            showModal("Guardado", `Presupuesto mensual establecido en ${formatCurrency(amt)}`);
+                        }
+                    }
+                }
+            );
+        }
+
+        function installPWA() {
+            showModal("Instalación PWA", "Puedes instalar VaultFin v6.1 en tu dispositivo directamente desde el menú de tu navegador ('Añadir a la pantalla de inicio').");
+        }
+
+        function setupPWAManifestAndSW() {
+            const badge = document.getElementById('offlineBadge');
+            const on = navigator.onLine;
+            badge.textContent = on ? 'En línea • datos locales' : 'Sin red • funciona offline';
+            badge.className = 'text-[10px] px-2 py-0.5 rounded-full border font-medium ' + (on ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30');
+        }
+
+        // =========================================================================
+        // 6. AURA VOICE & CHAT (WITH PROJECT COMMANDS)
+        // =========================================================================
+        let recognition = null;
+        let isContinuousListening = false;
+        let isRecognizing = false;
+        let speechOutputEnabled = true;
+        let autoListenOnOpen = false;
+        try { autoListenOnOpen = localStorage.getItem('vaultfin_auto_listen') === 'true'; } catch (e) {}
+
+        function toggleAutoListenOnOpen() {
+            autoListenOnOpen = !autoListenOnOpen;
+            try { localStorage.setItem('vaultfin_auto_listen', String(autoListenOnOpen)); } catch (e) {}
+            document.getElementById('autoListenStatus').textContent = autoListenOnOpen ? '⚡ Auto-voz al abrir: ON' : '⚡ Auto-voz al abrir: OFF';
+        }
+
+        let ttsSpeaking = false;
+
+        function updateMicUI() {
+            document.getElementById('micStatusText').textContent = 'Escucha continua: ' + (isContinuousListening ? 'ON' : 'OFF');
+            document.getElementById('micStatusDot').className = 'w-2 h-2 rounded-full ' + (isRecognizing ? 'bg-brand-500 animate-pulse' : 'bg-slate-400');
+            document.getElementById('auraIndicator').className = 'w-3 h-3 rounded-full ' + (isRecognizing ? 'bg-brand-500 animate-pulse' : 'bg-slate-500');
+            const btn = document.getElementById('continuousVoiceBtn');
+            btn.classList.toggle('border-brand-500', isContinuousListening);
+            btn.classList.toggle('bg-brand-500/10', isContinuousListening);
+        }
+
+        function voiceBlockedByContext() {
+            if (window.isSecureContext && location.protocol !== 'content:' && location.protocol !== 'file:') return false;
+            showModal("Voz bloqueada en este modo", "Abriste la app desde WhatsApp o desde un archivo, y Chrome no permite usar el micrófono ahí.\n\nSolución rápida: toca el cuadro de texto y usa el micrófono del teclado del celular, luego pulsa Enviar.\n\nSolución completa: sube el archivo a un sitio https gratuito (Netlify Drop o GitHub Pages) y ábrelo desde ese enlace en Chrome.");
+            const i = document.getElementById('chatInput'); if (i) i.focus();
+            return true;
+        }
+
+        function showVoiceHint(t) {
+            const el = document.getElementById('liveTranscript');
+            if (!t) { el.classList.add('hidden'); el.textContent = ''; } else { el.textContent = '🎙️ ' + t; el.classList.remove('hidden'); }
+        }
+
+        function initSpeechRecognition() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) return;
+            recognition = new SR();
+            recognition.lang = (navigator.language || '').toLowerCase().startsWith('es') ? navigator.language : 'es-419';
+            recognition.interimResults = true;
+            recognition.continuous = false; // en Android "continuous" duplica frases; se reinicia solo en onend
+            recognition.maxAlternatives = 1;
+            recognition.onstart = () => { isRecognizing = true; updateMicUI(); };
+            recognition.onresult = (e) => {
+                let interim = '', fin = '';
+                for (let i = e.resultIndex; i < e.results.length; i++) {
+                    const t = e.results[i][0].transcript;
+                    if (e.results[i].isFinal) fin += t; else interim += t;
+                }
+                if (fin) { showVoiceHint(''); handleVoiceTranscript(sanitizeText(fin, 220)); } else showVoiceHint(interim);
+            };
+            recognition.onerror = (e) => {
+                const msgs = {
+                    'not-allowed': 'No hay permiso de micrófono. Actívalo en los ajustes del navegador para este sitio. La voz requiere abrir la app desde https o localhost.',
+                    'service-not-allowed': 'El navegador bloqueó el reconocimiento de voz. Prueba con Chrome y una dirección https.',
+                    'network': 'El reconocimiento de voz de Chrome necesita conexión a internet.',
+                    'audio-capture': 'No se detecta ningún micrófono.'
+                };
+                if (msgs[e.error]) { isContinuousListening = false; updateMicUI(); showModal("Voz", msgs[e.error]); }
+            };
+            recognition.onend = () => {
+                isRecognizing = false; showVoiceHint(''); updateMicUI();
+                if (isContinuousListening && !isVaultLocked && !ttsSpeaking) setTimeout(() => { try { recognition.start(); } catch (x) {} }, 500);
+            };
+        }
+
+        function startSingleDictation() {
+            if (voiceBlockedByContext()) return;
+            if (!recognition) { showModal("Voz no disponible", "Tu navegador no soporta reconocimiento de voz."); return; }
+            try { recognition.start(); } catch (e) {}
+        }
+
+        function toggleContinuousListening() {
+            if (voiceBlockedByContext()) return;
+            if (!recognition) { showModal("Voz no disponible", "Tu navegador no soporta reconocimiento de voz."); return; }
+            isContinuousListening = !isContinuousListening;
+            try { isContinuousListening ? recognition.start() : recognition.stop(); } catch (e) {}
+            updateMicUI();
+        }
+
+        function toggleSpeechOutput() {
+            speechOutputEnabled = !speechOutputEnabled;
+            document.getElementById('muteVoiceBtn').textContent = speechOutputEnabled ? '🔊' : '🔇';
+            if (!speechOutputEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
+        }
+
+        function speak(text) {
+            if (!speechOutputEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(sanitizeText(text, 300).replace(/[\u2190-\u2BFF\uFE0F]|[\uD83C-\uD83E][\uDC00-\uDFFF]/g, ''));
+            u.lang = recognition ? recognition.lang : 'es-419';
+            // Pausar el micrófono mientras Aura habla para que no se escuche a sí misma
+            u.onstart = () => { ttsSpeaking = true; if (isRecognizing) { try { recognition.stop(); } catch (e) {} } };
+            const done = () => { ttsSpeaking = false; if (isContinuousListening && !isVaultLocked) { try { recognition.start(); } catch (e) {} } };
+            u.onend = done; u.onerror = done;
+            window.speechSynthesis.speak(u);
+        }
+
+        function handleVoiceTranscript(transcript) {
+            if (isVaultLocked || !transcript) return;
+            appendSafeMessage([{ text: `🎙️ ${transcript}` }], 'user');
+            if (!isContinuousListening) { try { recognition.stop(); } catch (e) {} }
+            processCommand(transcript);
+        }
+
+        function appendSafeMessage(segments, sender, silent = false) {
+            const container = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = sender === 'user' 
+                ? 'bg-brand-600/30 border border-brand-500/40 p-3 rounded-xl max-w-[85%] ml-auto text-slate-100 whitespace-pre-line' 
+                : 'bg-slate-700/60 p-3 rounded-xl max-w-[85%] text-slate-200 whitespace-pre-line';
+
+            segments.forEach(seg => {
+                if (seg.code) {
+                    const c = document.createElement('code'); c.className = 'text-brand-400 bg-slate-900 px-1 rounded'; c.textContent = seg.code; msgDiv.appendChild(c);
+                } else if (seg.bold) {
+                    const b = document.createElement('strong'); if (seg.colorClass) b.className = seg.colorClass; b.textContent = seg.bold; msgDiv.appendChild(b);
+                } else {
+                    msgDiv.appendChild(document.createTextNode(seg.text || ''));
+                }
+            });
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+            if (sender === 'assistant' && !silent) speak(segments.map(x => x.text || x.code || x.bold || '').join(''));
+        }
+
+        function renderWelcomeMessage() {
+            const container = document.getElementById('chatMessages');
+            container.replaceChildren();
+            appendSafeMessage([{ text: '¡Hola! Soy Aura v6.1. Ya puedo crear proyectos, registrar gastos dedicados y respaldar tus datos cifrados.' }], 'assistant', true);
+        }
+
+        let opChain = Promise.resolve();
+        function runExclusive(fn) { const p = opChain.then(fn, fn); opChain = p.catch(() => {}); return p; }
+        function voidTransactionById(id) { return runExclusive(() => voidTransactionByIdInner(id)); }
+        function processCommand(cmd) { return runExclusive(() => processCommandInner(cmd)); }
+        const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const say = (t) => appendSafeMessage([{ text: t }], 'assistant');
+        const newTx = (o) => ({ voided: false, timestamp: Date.now(), date: new Date().toLocaleDateString(), projectId: null, ...o });
+
+        function monthExpense() {
+            const d = new Date(); const c = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+            return state.transactions.filter(t => (t.timestamp || 0) >= c && !t.voided && (t.type === 'expense' || t.type === 'project_expense'))
+                .reduce((a, t) => roundMoney(a + t.amount), 0);
+        }
+
+        async function saveCmd(next, prior, reason, okMsg) {
+            if (await commitStateTransaction(next, prior, reason)) {
+                updateUI(); say(okMsg);
+                const m = monthExpense();
+                if (state.monthlyBudget > 0 && m > state.monthlyBudget) say(`⚠️ Superaste tu límite mensual (${formatCurrency(m)} de ${formatCurrency(state.monthlyBudget)}).`);
+                return true;
+            }
+            say('⚠️ No se pudo guardar el movimiento. Verifica que la bóveda esté desbloqueada y que los saldos alcancen.');
+            return false;
+        }
+
+        async function processCommandInner(rawCmd) {
+            if (isVaultLocked) return;
+            // Quita "Aura," del inicio (antes la coma impedía reconocer el comando)
+            const text = rawCmd.replace(/^\s*aura\b[\s,.:;!¡¿?-]*/i, '').trim();
+            const lower = text.toLowerCase();
+            const n = norm(text).replace(/^((?:crear|crea|registrar|registra|agregar|agrega|anadir|anade|nuevo|nueva|quiero|hacer)\s+)+(?:un\s+|una\s+)?/, '');
+
+            if (n.includes('anular ultimo') || n.includes('deshacer ultimo')) {
+                const last = [...state.transactions].filter(t => !t.voided && t.type !== 'reversal').sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))[0];
+                if (!last) return say('⚠️ No hay movimientos activos.');
+                await voidTransactionByIdInner(last.id);
+                return;
+            }
+
+            if (/^(?:un\s+|una\s+)?proyecto\b/.test(n)) {
+                const body = text.replace(/^.*?proyecto\s*/i, '');
+                const m = body.match(/^(.+)\s+con\s+(.+)$/i) || body.match(/^(.+)\s+(?:de|por)\s+(.+)$/i);
+                const projName = m ? sanitizeText(m[1], 60) : '';
+                const amt = m ? parseSpanishAmount(m[2]) : NaN;
+                if (!projName || !Number.isFinite(amt) || amt <= 0) return say('⚠️ Formato sugerido: "Crear proyecto [Nombre] con [Monto]".');
+                if (state.projects.some(p => norm(p.name) === norm(projName))) return say('⚠️ Ya existe un proyecto con ese nombre.');
+                if (amt > state.balance) return say('⚠️ Saldo insuficiente en cuenta principal para fondear este proyecto.');
+                const prior = cloneState(state), next = cloneState(state);
+                const id = generateUUID();
+                next.projects.push({ id, name: projName, balance: amt, budget: amt });
+                next.transactions.unshift(newTx({ id: generateUUID(), type: 'project_allocation', amount: amt, desc: `Creación y asignación a proyecto: ${projName}`, projectId: id }));
+                await saveCmd(next, prior, `Crear proyecto ${projName}`, `📁 Proyecto "${projName}" creado con ${formatCurrency(amt)}`);
+                return;
+            }
+
+            if (/^(gastar|gasto|egreso)\b/.test(n) && n.includes('proyecto')) {
+                const proj = [...state.projects].sort((a, b) => b.name.length - a.name.length).find(p => n.includes(norm(p.name)));
+                if (!proj) return say('⚠️ No se encontró el proyecto indicado.');
+                const amt = parseSpanishAmount(lower.split(proj.name.toLowerCase()).join(' ')); // sin el nombre, para no confundir números del nombre
+                if (!Number.isFinite(amt) || amt <= 0) return say('⚠️ Monto inválido.');
+                if (amt > proj.balance) return say(`⚠️ El proyecto "${proj.name}" solo tiene ${formatCurrency(proj.balance)} disponibles.`);
+                const prior = cloneState(state), next = cloneState(state);
+                next.transactions.unshift(newTx({ id: generateUUID(), type: 'project_expense', amount: amt, desc: `Gasto en proyecto: ${proj.name}`, projectId: proj.id }));
+                await saveCmd(next, prior, `Gasto en ${proj.name}`, `✅ Gasto de ${formatCurrency(amt)} registrado en proyecto "${proj.name}"`);
+                return;
+            }
+
+            if (/^(ingreso|ingresar|agregar ingreso|recibi)\b/.test(n)) {
+                const amount = parseSpanishAmount(lower);
+                if (!Number.isFinite(amount) || amount <= 0) return say('⚠️ Monto inválido.');
+                const prior = cloneState(state), next = cloneState(state);
+                next.transactions.unshift(newTx({ id: generateUUID(), type: 'income', amount, desc: 'Ingreso general' }));
+                await saveCmd(next, prior, 'Ingreso', `✅ Ingreso registrado: +${formatCurrency(amount)}`);
+                return;
+            }
+
+            if (/^(gasto|gastar|egreso|pague)\b/.test(n)) {
+                const amount = parseSpanishAmount(lower);
+                if (!Number.isFinite(amount) || amount <= 0) return say('⚠️ Monto inválido.');
+                if (amount > state.balance) return say('⚠️ Saldo insuficiente en cuenta principal.');
+                const prior = cloneState(state), next = cloneState(state);
+                next.transactions.unshift(newTx({ id: generateUUID(), type: 'expense', amount, desc: 'Gasto general' }));
+                await saveCmd(next, prior, 'Gasto', `✅ Gasto registrado: -${formatCurrency(amount)}`);
+                return;
+            }
+
+            say('🤖 Comando no reconocido. Prueba "ingreso 500", "crear proyecto Viaje con 300" o "gasto 50 del proyecto Viaje".');
+        }
+
+        function switchMainTab(tabName) {
+            const viewAssistant = document.getElementById('viewAssistant');
+            const viewReports = document.getElementById('viewReports');
+            const btnAssistant = document.getElementById('tabBtnAssistant');
+            const btnReports = document.getElementById('tabBtnReports');
+
+            if (tabName === 'reports') {
+                viewAssistant.classList.add('hidden');
+                viewReports.classList.remove('hidden');
+                viewReports.classList.add('flex');
+                btnReports.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition';
+                btnAssistant.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition';
+                renderReports();
+            } else {
+                viewReports.classList.add('hidden');
+                viewReports.classList.remove('flex');
+                viewAssistant.classList.remove('hidden');
+                btnAssistant.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition';
+                btnReports.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition';
+            }
+        }
+
+        function formatCurrency(amount) {
+            return '$' + Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updateUI() {
+            const projectsTotal = state.projects.reduce((acc, p) => roundMoney(acc + p.balance), 0);
+            document.getElementById('mainBalance').textContent = formatCurrency(state.balance);
+            document.getElementById('initialBalanceSub').textContent = `Apertura: ${formatCurrency(state.initialBalance)}`;
+            document.getElementById('projectsTotalBalance').textContent = formatCurrency(projectsTotal);
+            document.getElementById('totalIncome').textContent = formatCurrency(state.totalIncome);
+            document.getElementById('totalExpense').textContent = formatCurrency(state.totalExpense);
+            document.getElementById('projectCount').textContent = `${state.projects.length} activo(s)`;
+
+            const txContainer = document.getElementById('transactionsList');
+            txContainer.replaceChildren();
+
+            state.transactions.forEach(t => {
+                const isReversal = t.type === 'reversal';
+                const row = document.createElement('div');
+                row.className = `bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/50 flex justify-between items-center text-xs gap-2 ${t.voided ? 'opacity-50' : ''}`;
+
+                const left = document.createElement('div');
+                const desc = document.createElement('p');
+                desc.className = `font-medium ${t.voided ? 'line-through text-slate-400' : (isReversal ? 'text-amber-300' : 'text-slate-200')}`;
+                desc.textContent = t.desc + (t.voided ? ' [ANULADO]' : '');
+
+                const meta = document.createElement('div');
+                meta.className = 'flex items-center gap-2 mt-0.5';
+                const d = document.createElement('span'); d.className = 'text-slate-500 text-[10px]'; d.textContent = t.date;
+                meta.appendChild(d);
+
+                if (!t.voided && !isReversal) {
+                    const revBtn = document.createElement('button');
+                    revBtn.className = 'text-[10px] text-amber-400 hover:underline';
+                    revBtn.textContent = 'Revertir';
+                    revBtn.onclick = () => voidTransactionById(t.id);
+                    meta.appendChild(revBtn);
+                }
+                left.appendChild(desc); left.appendChild(meta);
+
+                const amt = document.createElement('span');
+                const pos = t.type === 'income' || t.type === 'initial_balance';
+                const transfer = t.type === 'project_allocation';
+                amt.className = 'font-bold shrink-0 ' + (isReversal ? 'text-amber-400' : pos ? 'text-emerald-400' : transfer ? 'text-sky-400' : 'text-rose-400');
+                amt.textContent = (isReversal ? '↩ ' : pos ? '+' : transfer ? '→ ' : '-') + formatCurrency(t.amount);
+
+                row.appendChild(left); row.appendChild(amt);
+                txContainer.appendChild(row);
+            });
+
+            const projContainer = document.getElementById('projectsList');
+            projContainer.replaceChildren();
+            state.projects.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 flex justify-between items-center text-xs';
+                const n = document.createElement('span'); n.className = 'font-semibold text-brand-400'; n.textContent = p.name;
+                const b = document.createElement('span'); b.className = 'font-bold text-slate-200'; b.textContent = formatCurrency(p.balance);
+                card.appendChild(n); card.appendChild(b);
+                projContainer.appendChild(card);
+            });
+
+            if (!document.getElementById('viewReports').classList.contains('hidden')) renderReports();
+        }
+
+        function mkRow(label, value, valCls, rowCls) {
+            const r = document.createElement('div'); r.className = rowCls;
+            const a = document.createElement('span'); a.className = 'text-slate-300'; a.textContent = label;
+            const b = document.createElement('span'); b.className = 'font-bold ' + valCls; b.textContent = value;
+            r.appendChild(a); r.appendChild(b); return r;
+        }
+
+        function renderReports() {
+            const period = document.getElementById('reportPeriodSelect').value;
+            const now = new Date();
+            let cutoff = 0;
+            if (period === 'month') cutoff = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            else if (period === 'week') cutoff = now.getTime() - (7 * 24 * 60 * 60 * 1000);
+            else if (period === 'year') cutoff = new Date(now.getFullYear(), 0, 1).getTime();
+
+            let periodIncome = 0; let periodExpense = 0;
+            state.transactions.filter(t => (t.timestamp || 0) >= cutoff && !t.voided && t.type !== 'reversal').forEach(t => {
+                if (t.type === 'income') periodIncome = roundMoney(periodIncome + t.amount);
+                if (t.type === 'expense' || t.type === 'project_expense') periodExpense = roundMoney(periodExpense + t.amount);
+            });
+            const net = roundMoney(periodIncome - periodExpense);
+            document.getElementById('repIncome').textContent = formatCurrency(periodIncome);
+            document.getElementById('repExpense').textContent = formatCurrency(periodExpense);
+            document.getElementById('repNet').textContent = (net >= 0 ? '+' : '') + formatCurrency(net);
+
+            // El límite es MENSUAL: se compara siempre con el gasto del mes, sin importar el período elegido
+            const budget = state.monthlyBudget || 0;
+            const budgetLabel = document.getElementById('budgetLabel');
+            const budgetBar = document.getElementById('budgetProgressBar');
+            const budgetAlert = document.getElementById('budgetAlertText');
+            if (budget > 0) {
+                const mExp = monthExpense();
+                const raw = Math.round((mExp / budget) * 100);
+                budgetLabel.textContent = `Límite: ${formatCurrency(budget)}`;
+                budgetBar.style.width = Math.min(100, raw) + '%';
+                budgetBar.className = (raw >= 90 ? 'bg-rose-500' : 'bg-brand-500') + ' h-full transition-all duration-300';
+                budgetAlert.textContent = raw >= 100 ? `⚠️ Superaste el presupuesto mensual (${formatCurrency(mExp)}).` : `Has utilizado el ${raw}% de tu límite mensual.`;
+            } else {
+                budgetLabel.textContent = 'Sin límite definido';
+                budgetBar.style.width = '0%';
+                budgetAlert.textContent = 'Fija un límite para activar alertas.';
+            }
+
+            const rowCls = 'flex justify-between items-center bg-slate-900/40 p-2 rounded-lg';
+            const distContainer = document.getElementById('capitalDistributionContainer');
+            distContainer.replaceChildren();
+            const projTotal = state.projects.reduce((a, p) => roundMoney(a + p.balance), 0);
+            distContainer.appendChild(mkRow('Principal Disponible', formatCurrency(state.balance), 'text-brand-400', rowCls));
+            state.projects.forEach(p => distContainer.appendChild(mkRow('Proyecto: ' + p.name, formatCurrency(p.balance), 'text-sky-400', rowCls)));
+            distContainer.appendChild(mkRow('Capital total', formatCurrency(roundMoney(state.balance + projTotal)), 'text-slate-200', rowCls + ' border border-slate-700'));
+
+            const projStatsBox = document.getElementById('projectStatsContainer');
+            projStatsBox.replaceChildren();
+            state.projects.forEach(p => projStatsBox.appendChild(mkRow(p.name + ' (libre)', formatCurrency(p.balance), 'text-brand-400', rowCls)));
+        }
+
+        function openSecurityModal() {
+            showModal(
+                isEncryptionEnabled ? "Cambiar Clave Maestra" : "Configurar Clave Maestra",
+                "Ingresa una clave maestra (mínimo 6 caracteres). Si la olvidas, los datos cifrados NO se pueden recuperar.",
+                {
+                    showInput: true,
+                    inputType: 'password',
+                    confirmText: isEncryptionEnabled ? 'Cambiar Clave' : 'Activar Cifrado',
+                    onConfirm: (pin) => {
+                        if (!pin || pin.length < 6) { showModal("Error", "Mínimo 6 caracteres."); return; }
+                        showModal("Confirmar Clave", "Escribe la clave otra vez para confirmarla:", {
+                            showInput: true, inputType: 'password', confirmText: 'Confirmar',
+                            onConfirm: async (pin2) => {
+                                if (pin2 !== pin) { showModal("Error", "Las claves no coinciden."); return; }
+                                try {
+                                    const salt = crypto.getRandomValues(new Uint8Array(16));
+                                    const key = await deriveKeyFromPin(pin, salt, NEW_ITER);
+                                    const res = await rotateSecurityConfigurationAtomic(true, key, bufToBase64(salt), NEW_ITER);
+                                    if (res.ok) showModal("Protegido", "Cifrado activado con éxito.");
+                                    else showModal("Error", res.reason);
+                                } catch (e) { showModal("Error", "No se pudo activar el cifrado."); }
+                            }
+                        });
+                    }
+                }
+            );
+        }
+
+        async function openRecoveryModal() {
+            const snaps = await getSnapshotsList();
+            if (snaps.length === 0) {
+                showModal("Puntos de Restauración", "No hay respaldos automáticos disponibles aún.");
+                return;
+            }
+            // keepBody: antes showModal ocultaba la lista justo después de llenarla
+            showModal("Puntos de Restauración", "Selecciona el punto al que deseas regresar:", { keepBody: true });
+            const bodyEl = document.getElementById('modalCustomBody');
+            bodyEl.replaceChildren();
+            bodyEl.classList.remove('hidden');
+
+            snaps.forEach(s => {
+                const row = document.createElement('div');
+                row.className = 'bg-slate-900/60 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs';
+                const info = document.createElement('div');
+                const t1 = document.createElement('p'); t1.className = 'font-semibold text-slate-200'; t1.textContent = s.reason || 'Respaldo';
+                const t2 = document.createElement('span'); t2.className = 'text-[10px] text-slate-400'; t2.textContent = new Date(s.timestamp).toLocaleString();
+                info.appendChild(t1); info.appendChild(t2); row.appendChild(info);
+
+                const btn = document.createElement('button');
+                btn.className = 'bg-brand-600 hover:bg-brand-500 text-white px-3 py-1 rounded-lg text-xs font-medium transition';
+                btn.textContent = 'Restaurar';
+                btn.onclick = async () => {
+                    try {
+                        if (s.encrypted && !activeCryptoKey) { showModal("Error", "Bóveda cifrada sin clave activa."); return; }
+                        const plain = s.encrypted ? await decryptObject(s.payload, activeCryptoKey) : s.payload;
+                        const validated = migrateAndValidateState(plain);
+                        if (validated && await commitStateTransaction(validated, cloneState(state), 'Restauración de respaldo')) {
+                            updateUI();
+                            showModal("Restaurado", "El estado anterior ha sido restaurado con éxito.");
+                        } else showModal("Error", "No se pudo restaurar este respaldo.");
+                    } catch (e) { showModal("Error", "No se pudo restaurar este respaldo."); }
+                };
+                row.appendChild(btn);
+                bodyEl.appendChild(row);
+            });
+        }
+
+        function showVoiceAndPWAGuide() {
+            showModal("Portabilidad", "VaultFin guarda tus datos solo en este navegador. Para llevarlos a otro dispositivo usa Exportar e Importar.\n\nActiva primero la clave maestra: sin ella, el respaldo se guarda en texto plano.\n\nPara usarla como app, elige 'Añadir a la pantalla de inicio' en el menú del navegador.");
+        }
+
+        async function exportData() {
+            if (isVaultLocked) return;
+            const run = async () => {
+                let payload = { app: 'VaultFin PRO', version: 6.1, timestamp: Date.now(), ...state };
+                if (isEncryptionEnabled && activeCryptoKey) {
+                    payload = { vaultfin_encrypted: true, salt: activeSaltB64, iterations: activeIterations, payload: await encryptObject(payload, activeCryptoKey) };
+                }
+                const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+                const a = document.createElement('a');
+                a.href = url; a.download = `vaultfin_v6.1_${new Date().toISOString().slice(0, 10)}.vaultfin`;
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            };
+            if (isEncryptionEnabled && activeCryptoKey) await run();
+            else showModal("Respaldo sin cifrar", "No hay clave maestra activa: el archivo contendrá tus datos en texto plano. ¿Exportar de todos modos?", { confirmText: 'Exportar', onConfirm: run });
+        }
+
+        function importData(event) {
+            const input = event.target;
+            const file = input.files[0];
+            if (!file || isVaultLocked) { input.value = ''; return; }
+            const reader = new FileReader();
+            reader.onloadend = () => { input.value = ''; }; // permite volver a importar el mismo archivo
+            reader.onload = async (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    const finish = async (data, label) => {
+                        const validated = migrateAndValidateState(data);
+                        if (validated && await commitStateTransaction(validated, cloneState(state), label)) {
+                            updateUI(); showModal("Importado", "Datos importados y conciliados con éxito.");
+                        } else showModal("Error", "Archivo inválido o incompatible.");
+                    };
+                    if (parsed && parsed.vaultfin_encrypted) {
+                        showModal("Respaldo Cifrado", "Este archivo está protegido con contraseña. Ingresa la clave maestra para importarlo:", {
+                            showInput: true, inputType: 'password', confirmText: 'Desencriptar e Importar',
+                            onConfirm: async (pin) => {
+                                try {
+                                    const key = await deriveKeyFromPin(pin, new Uint8Array(base64ToBuf(parsed.salt)), safeIter(parsed.iterations));
+                                    await finish(await decryptObject(parsed.payload, key), 'Importación cifrada');
+                                } catch (err) { showModal("Clave Incorrecta", "No se pudo descifrar el respaldo con esa clave."); }
+                            }
+                        });
+                        return;
+                    }
+                    await finish(parsed, 'Importación JSON');
+                } catch (err) { showModal("Error", "No se pudo procesar el archivo."); }
+            };
+            reader.readAsText(file, "UTF-8");
+        }
+
+        function clearAllData() {
+            showModal("¿Reiniciar?", "Se borrarán todos los movimientos y proyectos. Podrás deshacerlo desde Respaldos.", {
+                confirmText: "Sí, limpiar",
+                onConfirm: async () => {
+                    const prior = cloneState(state);
+                    const empty = { version: 6.1, initialBalance: 0, balance: 0, totalIncome: 0, totalExpense: 0, monthlyBudget: 0, transactions: [], projects: [] };
+                    if (await commitStateTransaction(empty, prior, 'Reinicio')) { updateUI(); renderWelcomeMessage(); }
+                    else showModal("Error", "No se pudo reiniciar.");
+                }
+            });
+        }
+
+        function showModal(title, msg, options = {}) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = msg;
+            const inputContainer = document.getElementById('modalInputContainer');
+            const inputField = document.getElementById('modalInput');
+            const cancelBtn = document.getElementById('modalCancelBtn');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            if (!options.keepBody) document.getElementById('modalCustomBody').classList.add('hidden');
+
+            if (options.showInput) {
+                inputContainer.classList.remove('hidden');
+                inputField.type = options.inputType || 'text';
+                inputField.value = '';
+                setTimeout(() => inputField.focus(), 50);
+            } else inputContainer.classList.add('hidden');
+
+            if (options.onConfirm) {
+                cancelBtn.classList.remove('hidden');
+                confirmBtn.textContent = options.confirmText || 'Confirmar';
+                confirmBtn.onclick = () => { const v = inputField.value; closeModal(); options.onConfirm(v); };
+            } else {
+                cancelBtn.classList.add('hidden');
+                confirmBtn.textContent = 'Entendido';
+                confirmBtn.onclick = closeModal;
+            }
+            inputField.onkeydown = (e) => { if (e.key === 'Enter' && options.onConfirm) { e.preventDefault(); confirmBtn.click(); } };
+            document.getElementById('customModal').classList.remove('hidden');
+            document.getElementById('customModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('modalCustomBody').classList.add('hidden');
+            document.getElementById('modalInput').value = '';
+            document.getElementById('customModal').classList.add('hidden');
+            document.getElementById('customModal').classList.remove('flex');
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const t = sanitizeText(input.value, 220);
+            if (!t) return;
+            appendSafeMessage([{ text: t }], 'user');
+            input.value = '';
+            processCommand(t);
+        }
+
+        function quickPrompt(p) {
+            const input = document.getElementById('chatInput');
+            input.value = p; input.focus();
+        }
+
+        window.onload = async function() {
+            setupPWAManifestAndSW();
+            window.addEventListener('online', setupPWAManifestAndSW);
+            window.addEventListener('offline', setupPWAManifestAndSW);
+            try {
+                await Promise.race([initDatabase(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))]);
+                const ready = await loadInitialDatabaseState();
+                if (ready) { renderWelcomeMessage(); updateUI(); }
+            } catch (err) {
+                db = null; showModal("Modo temporal", "Este navegador no permite guardar datos aquí (IndexedDB bloqueado). La app funciona, pero los datos se perderán al cerrarla. Usa Exportar para respaldar o abre la app desde una dirección https."); renderWelcomeMessage(); updateUI();
+            }
+            initSpeechRecognition();
+            document.getElementById('autoListenStatus').textContent = autoListenOnOpen ? '⚡ Auto-voz al abrir: ON' : '⚡ Auto-voz al abrir: OFF';
+            if (!recognition) appendSafeMessage([{ text: 'ℹ️ Este navegador no soporta voz. En el celular usa Chrome (Android) o Safari actualizado; mientras tanto puedes escribir los comandos.' }], 'assistant', true);
+            if (autoListenOnOpen && recognition && !isVaultLocked && window.isSecureContext && location.protocol === "https:") toggleContinuousListening();
+        };
+    </script>
+</body>
+</html>
